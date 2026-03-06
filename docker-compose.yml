@@ -1,0 +1,37 @@
+services:
+  db:
+    image: postgres:15
+    container_name: auth_postgres
+    environment:
+      POSTGRES_DB: auth_db
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: your_password
+    ports:
+      - "5432:5432"
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres -d auth_db"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+
+  auth-api:
+    build: ./auth-api
+    container_name: auth-api
+    ports:
+      - "8080:8080"
+    depends_on:
+      db:
+        condition: service_healthy
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:postgresql://db:5432/auth_db
+      SPRING_DATASOURCE_USERNAME: postgres
+      SPRING_DATASOURCE_PASSWORD: your_password
+      INTERNAL_TOKEN: winwin-secret-2026
+
+  data-api:
+    build: ./data-api
+    container_name: data-api
+    ports:
+      - "8081:8081"
+    environment:
+      INTERNAL_TOKEN: winwin-secret-2026
