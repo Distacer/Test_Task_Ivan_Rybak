@@ -62,7 +62,7 @@ users: id (UUID), email, password_hash (BCrypt).
 
 processing_log: id, user_id, input_text, output_text, created_at (Timestamp).
 
-🛡 Безпека
+Безпека
 Міжсервісна комунікація (Auth API -> Data API) захищена за допомогою X-Internal-Token.
 
 Паролі користувачів ніколи не зберігаються у відкритому вигляді.
